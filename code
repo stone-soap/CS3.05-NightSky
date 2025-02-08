@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="iu">
+	<head>
+		<meta charset="UTF-8">
+		<title>The sky at night</title>
+		<meta name="description" content="The sky at night">
+		<meta name="author" content="-kris-">
+		<!--
+			Change log:
+				Created:	21. October 2015
+				Modified: 	29. October			- reworked to add animation delay, fade, 
+												and further instructions
+							11. April 2017		- reworked for better style
+							26. Nov 2018		- reworked for better style again - Drapak
+							22. Nov 2024 		- reworked code 4 rot :p 		  - krizzy :3
+							25. Nov 2024 		- background working !! 		  - kris :p 
+							25. Nov 2024  		- setting up pipeline method !! 
+							02. Dec 2024 		- sad :( 						  - krih
+
+				Finished: 
+		-->
+		
+		<!-- remember to load jQuery! -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+		</script>
+		
+		<!-- EVALUATION CRITERIA CHECKLIST
+				INIT: including
+					[-]	create an empty object
+					[-]	use the value of an object's property to create different 
+							animation behaviours
+					[-]	pass an object to a function as a parameter/argument
+					[-]	use an object with multiple properties insIde an animation
+							(for example, animating top & left of the same image)
+
+				PROCESS: including
+					[-]	create a function that accepts an object 
+							as an argument/parameter
+ok  				[-]	set a delay using setTimeout() or setInterval
+					[-]	use an anonymous function insIde setTimeout() or setInterval
+					[?]	use string addition
+					[-]	processes all eight planets
+					
+				OUTPUT: including ANY FIVE of 
+					[-]	change the src of an element
+				 	[-]	position an object using % instead of px
+					[-]	animate a change in the width of an element
+					[-]	animate a fade in or fade out of an element
+					[-]	display information using .innerHTML
+					[-]	animate using a custom duration
+
+				STYLE: including
+					[-]	honour all previous //STYLE sections
+					[-]	use descriptive variable names
+					[-]	break up functions into separate ones for input, processing, 
+							and output
+					[-]	uses descriptive comments to Identify and describe each function, 
+							for example: //PROCESS: this function accepts distanceUp and 
+							animates the image up that number of pixels
+					[-]	add spaces between mathematical operators, 
+							for example: var exampleVar = 3 + 4, not var exampleVar=3+4.
+
+cahara, d'arce, enki, ragnvaldr, le'garde, the girl, moonless, skeleton, recruitable characters :D
+-https://fearandhunger.wiki.gg/images/4/4a/1.png?20230124204146   -> 51x101px
+-https://fearandhunger.wiki.gg/images/f/fb/2.png?20230124204330   -> 51x101px
+-https://fearandhunger.wiki.gg/images/8/86/Enki_sprite.png?20230124203753 -> 65x109px
+-https://fearandhunger.wiki.gg/images/0/09/4.png?20230124203813  -> 51x101px
+-https://fearandhunger.wiki.gg/images/9/9e/7.png?20230124203825  -> 51x101px
+-https://fearandhunger.wiki.gg/images/d/d6/15.png?20230124204246 -> 51x101px
+-https://fearandhunger.wiki.gg/images/0/01/Moonless_overworld.png?20230124204538 -> 102x101px
+-https://fearandhunger.wiki.gg/images/4/4b/Skeleton_sprite.png?20230124204211 -> 63x110px
+
+caverns background
+https://fearandhunger.wiki.gg/images/c/c7/Caverns_background.png
+
+make text fade in with their names after??
+
+
+------------STYLE GUIDE FOR LONG LINES: DO NOT PASS COLUMN 95 -------------------------------|
+		-->
+
+		<style>
+			span {
+				border:				1px solid red;
+			}
+
+			button {
+				border:				1px solid grey;
+				color:				grey;
+				background-color:	#36323Fff;
+			}
+
+			img {
+				position:			fixed;
+				/* start off in the middle of the screen */
+				top:				60%; 
+				left:				50%;
+				z-index: 			100;
+			}
+
+			#imageOutputBox {
+				position: absolute;
+				height: 	100%;
+				width:  	100%
+			}
+
+			#caverns{
+				position: absolute;
+				height: 	100%;
+				width:  	100%;
+				top: 		0px;
+				left:  		0px;
+				z-index:  	1;
+			}
+			
+
+		</style>
+	</head>
+
+	<body id="body">
+		<h2 id="heading">✩°｡⋆ 3.05: hand-in: the sky at night ⋆｡°✩</h2>
+		<button id="dimButtonId">✩°｡⋆ Click to enter the ⋆｡°✩<br>dungeons of Fear and Hunger!</button>
+		<button id="startButtonId">
+			✩°｡⋆ Click to see ⋆｡°✩<br />your new party members!
+		</button><br>		
+		<img id="caharaId">
+		<img id="darceId">
+		<img id="enkiId">
+		<img id="ragnvaldrId">
+		<img id="legardeId">
+		<img id="girlId">
+		<img id="moonlessId">
+		<img id="skeletonId">
+		<br>
+		<div id="imageOutputBox"></div>
+
+
+ 		<script>
+			//INIT set up all the planet objects
+			var caharaObj = {}; //define cahara as an empty object
+			caharaObj.id				= "#caharaId";
+			caharaObj.src				= "https://fearandhunger.wiki.gg/images/4/4a/1.png?20230124204146";
+			caharaObj.startDelay		= 1000;
+			caharaObj.top				= 60;
+			caharaObj.left				= 15;
+			caharaObj.height			= 101;
+			caharaObj.width				= 51;
+			caharaObj.animationSpeed	= 3000;
+			caharaObj.timeToFade		= 2000;
+			caharaObj.fadingIn 			= 3000;
+			//Using this method for requirements, I don't like it as much :P
+			
+			var darceObj = {
+				id:				"#darceId",
+				src:			"https://fearandhunger.wiki.gg/images/f/fb/2.png?20230124204330",
+				startDelay:		2000,
+				top:			60,
+				left:			25,
+				height:			101,
+				width:			51,
+				animationSpeed:	3000,
+				timeToFade:		13000,
+				fadingIn: 		3000
+			};
+			
+			var enkiObj = { 
+				id: 			"#enkiId", 
+				src: 			"https://fearandhunger.wiki.gg/images/8/86/Enki_sprite.png?20230124203753", 
+				startDelay: 	3000, 
+				top: 			60, 
+				left: 			35, 
+				height:			109,
+				width:			65,				
+				animationSpeed: 3000, 
+				timeToFade: 	13000,
+				fadingIn: 		3000				
+			};
+			
+			var ragnvaldrObj = {
+				id:				"#ragnvaldrId",
+				src:			"https://fearandhunger.wiki.gg/images/0/09/4.png?20230124203813",
+				startDelay:		4000,
+				top:			60,
+				left:			45,
+				height:			101,
+				width:			51,				
+				animationSpeed:	3000,
+				timeToFade:		13000,
+				fadingIn: 		3000				
+			};
+			
+			var legardeObj = {
+				id:				"#legardeId",
+				src:			"https://fearandhunger.wiki.gg/images/9/9e/7.png?20230124203825",
+				startDelay:		5000,
+				top:			60,
+				left:			55,
+				height:			101,
+				width:			51,				
+				animationSpeed:	3000, 
+				timeToFade:		13000,
+				fadingIn: 		3000
+			};
+			
+			var girlObj = {
+				id:				"#girlId",
+				src:			"https://fearandhunger.wiki.gg/images/d/d6/15.png?20230124204246",
+				startDelay:		6000,
+				top:			60,
+				left:			65,
+				height:			101,
+				width:			51,				
+				animationSpeed:	3000,
+				timeToFade:		13000,
+				fadingIn: 		3000				
+			};
+
+			var moonlessObj = {
+				id:				"#moonlessId",
+				src:			"https://fearandhunger.wiki.gg/images/0/01/Moonless_overworld.png?20230124204538",
+				startDelay:		7000,
+				top:			60,
+				left:			75,
+				height:			102,
+				width:			101,
+				animationSpeed:	3000,
+				timeToFade:		13000,
+				fadingIn: 		3000,
+			};
+
+			var skeletonObj = {
+				id:				"#skeletonId",
+				src:			"https://fearandhunger.wiki.gg/images/4/4b/Skeleton_sprite.png?20230124204211",
+				startDelay:		8000,
+				top:			60,
+				left:			85,
+				height:			110,
+				width:			63,
+				animationSpeed:	3000,
+				timeToFade:		13000,
+				fadingIn: 		3000				
+			};
+
+			//big sigma mandatory maths function 
+			var numNums =function(){
+				//INPUT
+				var randomNumber = Math.ceil( Math.random() * 20 );
+				
+				//PROCESS
+	  			var answer = Math.PI * ( Math.pow( randomNumber, 3 ) );
+
+	            // OUTPUT: when button is pressed, show answer in console log.
+	            console.log(answer + ' this is the math I promise');
+			}
+
+
+			//MAIN - CENTRAL HUB: set delays before animating each planet 
+			var mainProcedure = function() {
+				console.log('in le main procedure');
+				// Set a delay for each planet equal to startDelay before 
+
+				animateNow(caharaObj);
+				animateNow(darceObj);
+				animateNow(enkiObj);
+				animateNow(ragnvaldrObj);
+				animateNow(legardeObj);
+				animateNow(girlObj);				
+				animateNow(moonlessObj);
+				animateNow(skeletonObj);
+			}
+			
+			//Create a function that will display and animate cool things for 
+			//the planet object that is given as a parameter
+
+			//0UTPUT - ANIMATION FUNCTIONS
+			var animateNow = function(obj){
+
+				setTimeout(function(){
+					document.querySelector(obj.id).src = obj.src;
+
+					$(obj.id).animate( 
+						{ 
+							top: 		obj.top + '%',
+							left: 	obj.left + '%',
+							height: 		obj.height + 'px',
+							width: 		obj.width + 'px',						
+							opacity: 		1
+						}
+						,{
+							duration: 	obj.animationSpeed
+
+						}
+
+					);
+					console.log(obj.id +  ' animation');
+				}, obj.startDelay );
+
+			}
+				
+			
+			//OUTPUT: reverse the text colors
+			var dimTheLights = function () {
+				document.body.style.color 				= 'gray';
+				document.body.style.backgroundColor 	= 'black';				
+				document.querySelector("#imageOutputBox").innerHTML ="<img id='caverns'src='https://fearandhunger.wiki.gg/images/c/c7/Caverns_background.png'>";
+				console.log('entered the dungeons')
+			}
+			
+			//INPUT EVENT: attach the click events to the buttons
+			document.querySelector( "#dimButtonId" ).onclick	= dimTheLights;
+			document.querySelector( "#startButtonId" ).onclick	= mainProcedure;
+			document.querySelector( "#heading" ).onclick = numNums
+			
+			/*
+------------STYLE GUIDE FOR LONG LINES: DO NOT PASS COLUMN 95 -------------------------------|			
+			*/
+		</script>
+	</body>
+</html>
